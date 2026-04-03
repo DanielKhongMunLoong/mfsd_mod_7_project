@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "obvEXuYmFvc=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\chysa\\OneDrive\\Desktop\\Csharp\\coursera\\1_ms fullstack\\7_full_stack_integration\\4_module_4\\1_code\\mfsd_mod_7_project\\FullStackApp\\ServerApp\\ServerApp.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\chysa\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.4\\microsoft.aspnetcore.openapi.10.0.4.nupkg.sha512",
+    "C:\\Users\\chysa\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

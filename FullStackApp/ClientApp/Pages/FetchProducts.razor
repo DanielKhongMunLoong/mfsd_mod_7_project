@@ -1,0 +1,117 @@
+@page "/fetchproducts"
+@inject HttpClient Http
+
+@using System.Text.Json
+
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold" href="/">Client App</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" href="/">Home</a>
+        <a class="nav-link" href="/fetchproducts">Fetch Products</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container-lg mt-4">
+
+<div class="container d-flex justify-content-start mt-4 mx-0">
+    <div>
+        <h3>Product List</h3>
+        <button class="btn btn-primary" @onclick="LoadAllProducts">Load Products</button>
+        <button class="btn btn-warning" @onclick="ClearAllProducts">Clear all Products</button>
+    </div>
+</div>
+
+<div class="container-lg mt-4">
+    <div class="row row-cols-1 row-cols-md-3 g-4 mx-0 ">
+        @if (products != null)
+        {
+            foreach (var product in products)
+            {
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-header fw-bold">
+                            Product Name: @product.Name
+                        </div>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">Id: @product.Id</li>
+                            <li class="list-group-item">Price: @product.Price</li>
+                            <li class="list-group-item">Stock: @product.Stock</li>
+                            <li class="list-group-item">Category: @product.Category?.Name</li>
+                            <li class="list-group-item">Category Id: @product.Category?.Id</li>
+                        </ul>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <h2>Loading...</h2>
+        }
+    </div>
+</div>
+
+</div>
+
+@code {
+    //private Product[]? products;
+
+    private List<Product>? products;
+    protected override async Task OnInitializedAsync()
+    {
+        products = await Http.GetFromJsonAsync<List<Product>>("http://localhost:5031/api/productlist");
+        //products = null;
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Products loaded: {(products != null ? products.Count.ToString() : "null")}");
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Product details:");
+        if (products != null)
+        {
+            foreach (var product in products)
+            {
+                Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: - {product.Name} (ID: {product.Id}, Price: {product.Price}, Stock: {product.Stock}, Category: {product.Category?.Name}, Category Id: {product.Category?.Id})");
+            }
+        }
+    }
+
+    private async Task ClearAllProducts()
+    {
+        products.Clear();
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Cleared, products count: {(products != null ? products.Count.ToString() : "null")}");
+    }
+
+    private async Task LoadAllProducts()
+    {
+        products = await Http.GetFromJsonAsync<List<Product>>("http://localhost:5031/api/productlist");
+        //products = null;
+        Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: " + "Products loaded: " + (products != null ? products.Count.ToString() : "null"));
+        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Product details:");
+        if (products != null)
+        {
+            foreach (var product in products)
+            {
+                Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: - {product.Name} (ID: {product.Id}, Price: {product.Price}, Stock: {product.Stock}, Category: {product.Category?.Name}, Category Id: {product.Category?.Id})");
+            }
+        }
+    }
+
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public double Price { get; set; }
+        public int Stock { get; set; }
+        public Category Category { get; set; }
+    }
+
+    public class Category
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+}
