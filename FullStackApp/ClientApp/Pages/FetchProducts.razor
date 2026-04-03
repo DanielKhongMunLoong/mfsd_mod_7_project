@@ -66,16 +66,23 @@
     private List<Product>? products;
     protected override async Task OnInitializedAsync()
     {
-        products = await Http.GetFromJsonAsync<List<Product>>("http://localhost:5031/api/productlist");
-        //products = null;
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Products loaded: {(products != null ? products.Count.ToString() : "null")}");
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Product details:");
-        if (products != null)
+        try
         {
-            foreach (var product in products)
+            products = await Http.GetFromJsonAsync<List<Product>>("http://localhost:5031/api/productlist");
+            //products = null;
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Products loaded: {(products != null ? products.Count.ToString() : "null")}");
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Product details:");
+            if (products != null)
             {
-                Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: - {product.Name} (ID: {product.Id}, Price: {product.Price}, Stock: {product.Stock}, Category: {product.Category?.Name}, Category Id: {product.Category?.Id})");
+                foreach (var product in products)
+                {
+                    Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: - {product.Name} (ID: {product.Id}, Price: {product.Price}, Stock: {product.Stock}, Category: {product.Category?.Name}, Category Id: {product.Category?.Id})");
+                }
             }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Error loading products: {ex.Message}");
         }
     }
 
@@ -87,17 +94,24 @@
 
     private async Task LoadAllProducts()
     {
-        products = await Http.GetFromJsonAsync<List<Product>>("http://localhost:5031/api/productlist");
-        //products = null;
-        Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: " + "Products loaded: " + (products != null ? products.Count.ToString() : "null"));
-        Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Product details:");
-        if (products != null)
+        try
         {
-            foreach (var product in products)
+            products = await Http.GetFromJsonAsync<List<Product>>("http://localhost:5031/api/productlist");
+            //products = null;
+            Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: " + "Products loaded: " + (products != null ? products.Count.ToString() : "null"));
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Product details:");
+            if (products != null)
             {
-                Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: - {product.Name} (ID: {product.Id}, Price: {product.Price}, Stock: {product.Stock}, Category: {product.Category?.Name}, Category Id: {product.Category?.Id})");
+                foreach (var product in products)
+                {
+                    Console.WriteLine( $"[{DateTime.Now:HH:mm:ss}]: - {product.Name} (ID: {product.Id}, Price: {product.Price}, Stock: {product.Stock}, Category: {product.Category?.Name}, Category Id: {product.Category?.Id})");
+                }
             }
         }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[{DateTime.Now:HH:mm:ss}]: Error loading products: {ex.Message}");
+        }       
     }
 
     public class Product
